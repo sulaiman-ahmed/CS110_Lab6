@@ -43,7 +43,7 @@ mongoose.connect(db,
 // Create controller handlers to handle requests at each endpoint
 
 //createMessages
-app.post("/:roomName/createMessage", function(req, res) {
+app.post("/createMessage", function(req, res) {
     console.log("WEMADEIT")
     const newMessage = new Messages ({
         name: req.body.userName,
