@@ -6,7 +6,7 @@
 {{#if isAvailable}}
 <ul id = "list-template">
     {{#each rooms}}
-        <li> <a href={{this.name}}> {{this.name}}  </a></li>
+        <li> <a href={{this.name}}> {{this.name}} </a></li>
     {{/each}}
 </ul>
 {{/if}}
@@ -14,7 +14,6 @@
 <form action="/create" method="POST">
 <input type="text" name="roomName" placeholder="Please enter a room name"/>
 <input type="submit" value="Create Room"/>
-
 </form>
 
 
