@@ -31,9 +31,11 @@
                 var ul_element = document.getElementById('list-template');
                 ul_element.innerHTML = "";
                 for(var j = 0; j < roomJson.length; j++) {
-                    var li = document.createElement('li');
-                    li.innerHTML = roomJson[j].name;
-                    
+                     var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.innerHTML = roomJson[j].name;
+                    a.href = "http://localhost:8080/" + roomJson[j].name;
+                    li.appendChild(a);
                     ul_element.appendChild(li);
                 }
             }).catch(err => {

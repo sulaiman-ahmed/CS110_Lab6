@@ -6,6 +6,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const config = require('config');
 const Room = require("./models/Rooms")
+const Messages = require("./models/Messages")
 
 // import handlers
 const homeHandler = require('./controllers/home.js');
@@ -41,6 +42,25 @@ mongoose.connect(db,
 
 // Create controller handlers to handle requests at each endpoint
 
+//createMessages
+app.post("/:roomName/createMessage", function(req, res) {
+    console.log("WEMADEIT")
+    const newMessage = new Messages ({
+        name: req.body.userName,
+        text: req.body.mesageText,
+        roomName: req.body.roomName
+    })
+    // FOR SOME REASON THIS IS NOT GETTING ANY OF THE POST INFORMATION AND IDK WHY
+    newMessage.save().then(console.log("Message has been added")).catch(err => console.log("Error when creating room: ", err))
+});
+
+// endpoint getMessages return json of all messages in database
+app.get("/:roomName/getMessages", function(req, res){
+    Messages.find().lean().then(item => {
+        res.json(item)
+    })
+})
+
 //createroom
 app.post("/create", function(req, res) {
     const newRoom = new Room ({
@@ -51,7 +71,7 @@ app.post("/create", function(req, res) {
     newRoom.save().then(console.log("Room has been added")).catch(err => console.log("Error when creating room: ", err))
 })
 
-// endpoint getRoom return json of all rooms in databse
+// endpoint getRoom return json of all rooms in database
 app.get("/getRoom", function(req, res) {
     Room.find().lean().then(item => {
         res.json(item)

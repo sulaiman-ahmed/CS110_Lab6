@@ -1,6 +1,37 @@
-<h1> Room </h1>
-<p>This is a demo of chatroom page</p>
-<p>
-    The room you are visiting is {{ roomName }}
-</p>
-<p>To generate a new room, here is the room id: {{ newRoomId }}</p>
+
+<body onload="askUser()">
+    <h1> Room </h1>
+    <p>This is a demo of chatroom page</p>
+    {{!-- <p>
+        The room you are visiting is {{ roomName }}
+    </p> --}}
+    <p>To generate a new room, here is the room id: {{ newRoomId }}</p>
+
+
+    <form action="/{{roomName}}/createMessage" method="POST"> 
+        <h3>Your room is</h3>
+        <input type="text" name="roomName" value = {{roomName}} display = "hidden"/>
+        <br>
+        <br/>
+        <input type="text" name="userName" value="" readonly="false" id = "userFill"/>
+        <input type="text" name="messageText" placeholder="Please enter a message"/>
+        <input type="submit" value="Message"/>
+    </form>
+</body>
+<!-- heres the issue. this wont post all the values to the server.js file and i cant pull it there, and i 
+dont know how to fix it so help-->
+
+<script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
+<script>
+    var user;
+    async function askUser() {
+        if (user == undefined) { //no user assigned yet
+            user = prompt("Please enter your username!");
+            console.log(user);
+            document.getElementById('userFill').setAttribute('value', user);
+            document.getElementById('userFill').setAttribute('readonly', true);
+        } else { //User already assigned
+            alert("Enjoy your stay, " + user );
+        }
+    }
+</script>
