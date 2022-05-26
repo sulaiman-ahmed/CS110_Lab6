@@ -2,6 +2,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const hbs = require('express-handlebars');
+const hbsnorm = require('handlebars');
 const path = require('path');
 const mongoose = require('mongoose');
 const config = require('config');
@@ -36,6 +37,12 @@ mongoose.connect(db,
         console.log("Connected to MongoDB");
     })
 
+    hbsnorm.registerHelper('ifCond', function(room1, room2, options) {
+    if(room1 === room2) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+    });
 // set up stylesheets route
 
 // TODO: Add server side code
@@ -47,7 +54,7 @@ app.post("/createMessage", function(req, res) {
     console.log("WEMADEIT")
     const newMessage = new Messages ({
         name: req.body.userName,
-        text: req.body.mesageText,
+        text: req.body.messageText,
         roomName: req.body.roomName
     })
     // FOR SOME REASON THIS IS NOT GETTING ANY OF THE POST INFORMATION AND IDK WHY

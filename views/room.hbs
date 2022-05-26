@@ -1,4 +1,6 @@
-
+<script>
+    
+</script>
 <body onload="askUser()">
     <h1> Room </h1>
     <p>This is a demo of chatroom page</p>
@@ -10,14 +12,23 @@
         <h3>Your room is</h3>
 
     <form action="/createMessage" method="POST"> 
-        <input type="text" name="roomName" value = {{roomName}} display = "hidden"/>
+        <input type="text" name="roomName" value = {{roomName}} id = "room"/>
         <input type="text" name="userName" value="" readonly="false" id = "userFill"/>
         <input type="text" name="messageText" placeholder="Please enter a message"/>
         <input type="submit" value="Message"/>
     </form>
 </body>
-<!-- heres the issue. this wont post all the values to the server.js file and i cant pull it there, and i 
-dont know how to fix it so help-->
+
+
+{{#if isAvailable}}
+    <ul id = "list-template">
+        {{!-- {{#each messages}}
+            {{#ifCond this.roomName roomName }}
+                <li> [{{this.date}}] -- {{this.name}}: {{this.text}} RoomName: {{this.roomName}} </li>
+            {{/ifCond}}
+        {{/each}} --}}
+    </ul>
+{{/if}}
 
 <script src="https://twitter.github.io/typeahead.js/js/handlebars.js"></script>
 <script>
@@ -32,4 +43,32 @@ dont know how to fix it so help-->
             alert("Enjoy your stay, " + user );
         }
     }
+    var room = document.getElementById('room').getAttribute('value');
+    console.log(room);
+    var fetchString = "http://localhost:8080/" + room + "/getMessages";
+    window.addEventListener('load', function () {
+        setInterval( async function() {
+            fetch(fetchString)
+            .then(response => response.json())
+            .then(data => {
+                var messageJson = data;
+                console.log(messageJson);
+
+                var ul_element = document.getElementById('list-template');
+                ul_element.innerHTML = "";
+                for(var j = 0; j < messageJson.length; j++) {
+                    if(messageJson[j].roomName == room) {
+                        var li = document.createElement('li');
+                        li.innerHTML = messageJson[j].date + ' -- ' + messageJson[j].name + ': ' + messageJson[j].text ;
+                        ul_element.appendChild(li);
+                    }
+                    
+                }
+            }).catch(err => {
+                console.log("Error when rendering messages", err);
+            })
+        }, 2000)
+    })
+    
 </script>
+
